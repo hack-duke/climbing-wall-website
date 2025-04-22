@@ -2,38 +2,30 @@
 
 import Image from "next/image";
 import { PhotoGrid } from '@/components/PhotoGrid';
-import { UploadButton } from '@/components/UploadButton';
 import { useState } from 'react';
 
 export default function Home() {
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const handleUploadComplete = () => {
-    setRefreshKey(prev => prev + 1);
-  };
-
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="container mx-auto px-4 py-8 row-start-2">
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-6 h-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M14 12L8 6M14 12L8 18M14 12H8"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <h1 className="text-xl font-semibold">Climbing Photos</h1>
-          </div>
-          <UploadButton onUploadComplete={handleUploadComplete} />
+    <div className="min-h-screen">
+      <main className="container mx-auto px-4">
+        <div className="flex items-center gap-2 mb-8">
+          <svg
+            className="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 12L8 6M14 12L8 18M14 12H8"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <h1 className="text-xl font-semibold">Climbing Photos</h1>
         </div>
 
         <div className="text-center mb-12">
@@ -45,7 +37,7 @@ export default function Home() {
 
         <PhotoGrid key={refreshKey} />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+      <footer className="flex gap-[24px] flex-wrap items-center justify-center mt-8 mb-8">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
