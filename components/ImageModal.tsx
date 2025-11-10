@@ -15,7 +15,7 @@ export function ImageModal({ imageKey, lastModified, onClose, onShare }: ImageMo
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-gray-300 z-50"
+          className="absolute top-4 right-4 text-white hover:text-gray-300 z-50 cursor-pointer"
         >
           <svg
             className="w-6 h-6"
