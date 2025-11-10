@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { ImageModal } from './ImageModal';
 
 interface Photo {
@@ -22,13 +22,14 @@ export function PhotoGrid() {
         const response = await fetch('/api/photos');
         const data = await response.json();
         setPhotos(data.photos || []);
+ 
       } catch (error) {
         console.error('Error fetching photos:', error);
       } finally {
-        setLoading(false);
+              setLoading(false);
       }
     };
-
+    
     fetchPhotos();
   }, []);
 
@@ -41,7 +42,7 @@ export function PhotoGrid() {
       try {
         await navigator.share({
           title: 'Climbing Wall Photo',
-          text: `Check out this climbing photo from ${format(new Date(selectedPhoto.LastModified), 'MMMM d, yyyy')}!`,
+          text: `Check out this climbing photo from ${formatDistanceToNow(new Date(selectedPhoto.LastModified), )}!`,
           url: `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.amazonaws.com/${selectedPhoto.Key}`,
         });
       } catch (error) {
@@ -82,7 +83,7 @@ export function PhotoGrid() {
             </div>
             <div className="p-4">
               <p className="text-gray-600">
-                {format(new Date(photo.LastModified), 'M/d/yyyy')}
+                {formatDistanceToNow(new Date(photo.LastModified), { addSuffix: true })}
               </p>
             </div>
           </div>

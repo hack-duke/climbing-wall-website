@@ -2,6 +2,9 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 // Initialize S3 Client
+console.log(process.env.AWS_ACCESS_KEY_ID!);
+console.log(process.env.AWS_SECRET_ACCESS_KEY!);
+
 const s3Client = new S3Client({
     region: 'us-east-2',
     credentials: {
