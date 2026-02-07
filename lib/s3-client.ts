@@ -10,7 +10,7 @@ const s3Client = new S3Client({
     },
 });
 
-export const BUCKET_NAME = process.env.AWS_BUCKET_NAME || 'hackduke-climbing-wall';
+export const BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || 'hackduke-climbing-wall';
 
 export async function listPhotos() {
     try {

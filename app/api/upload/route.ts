@@ -13,6 +13,8 @@ export async function POST(request: Request) {
     try {
         const formData = await request.formData();
         const file = formData.get('file') as File;
+
+        console.log(process.env.NEXT_PUBLIC_AWS_BUCKET_NAME);
         
         if (!file) {
             return NextResponse.json(
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
 
         await s3Client.send(
             new PutObjectCommand({
-                Bucket: process.env.AWS_BUCKET_NAME,
+                Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME,
                 Key: filename,
                 Body: buffer,
                 ContentType: file.type,
