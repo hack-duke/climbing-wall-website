@@ -11,6 +11,15 @@ const s3Client = new S3Client({
 
 export async function POST(request: Request) {
     try {
+        const bearer = request.headers.get('Authorization');
+
+        if (!bearer || !bearer.startsWith('Bearer ') || bearer.split(' ')[1] !== process.env.HACKDUKE_ADMIN_PASSWORD) {
+            return NextResponse.json(
+                { error: 'Unauthorized' },
+                { status: 401 }
+            );
+        }
+
         const formData = await request.formData();
         const file = formData.get('file') as File;
         
