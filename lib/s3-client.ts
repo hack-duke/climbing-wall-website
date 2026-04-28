@@ -1,5 +1,5 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import { GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
+import { GetObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 // Initialize S3 Client
 const s3Client = new S3Client({
@@ -37,6 +37,21 @@ export async function getPhoto(key: string) {
         return response.Body;
     } catch (error) {
         console.error('Error getting photo:', error);
+        throw error;
+    }
+}
+
+export async function deletePhoto(key: string) {
+    try {
+        const command = new DeleteObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: key,
+        });
+        
+        await s3Client.send(command);
+    }
+    catch (error) {
+        console.error('Error deleting photo:', error);
         throw error;
     }
 }

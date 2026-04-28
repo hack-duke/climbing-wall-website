@@ -54,6 +54,25 @@ export function PhotoGrid() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!selectedPhoto) return;
+    
+    try {
+      const response = await fetch('/api/photos', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: selectedPhoto.Key }),
+      });
+      
+      if (response.ok) {
+        setPhotos(photos.filter(photo => photo.Key !== selectedPhoto.Key));
+        setSelectedPhoto(null);
+      }
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
@@ -96,6 +115,7 @@ export function PhotoGrid() {
           lastModified={selectedPhoto.LastModified}
           onClose={() => setSelectedPhoto(null)}
           onShare={handleShare}
+          onDelete={handleDelete}
         />
       )}
     </>
