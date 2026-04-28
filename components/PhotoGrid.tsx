@@ -22,48 +22,63 @@ export function PhotoGrid() {
         const response = await fetch('/api/photos');
         const data = await response.json();
         setPhotos(data.photos.reverse() || []); // reverse to show newest first
- 
+
       } catch (error) {
         console.error('Error fetching photos:', error);
       } finally {
-              setLoading(false);
+        setLoading(false);
       }
     };
-    
+
     fetchPhotos();
   }, []);
 
   const handleShare = async () => {
     if (!selectedPhoto) return;
-    
-    // For now, we'll just use the native share API if available
-    // Later you can implement email sharing
-    if (navigator.share) {
+
+    const imageUrl = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.amazonaws.com/${selectedPhoto.Key}`;
+
+    if (navigator.share && navigator.canShare) {
       try {
-        await navigator.share({
-          title: 'Climbing Wall Photo',
-          text: `Check out this climbing photo from ${formatDistanceToNow(new Date(selectedPhoto.LastModified), )}!`,
-          url: `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.amazonaws.com/${selectedPhoto.Key}`,
+        // Fetch the image and convert to blob
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+
+        // Create a File from the blob
+        const file = new File([blob], 'climbing-photo.jpg', {
+          type: blob.type,
         });
+
+        // Check if files can be shared
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: 'Climbing Wall Photo',
+            text: `Check out this climbing photo from ${formatDistanceToNow(
+              new Date(selectedPhoto.LastModified)
+            )} ago!`,
+            files: [file],
+          });
+        } else {
+          console.log('File sharing not supported on this device');
+        }
       } catch (error) {
         console.error('Error sharing:', error);
       }
     } else {
-      // Fallback - you can implement email sharing here
-      console.log('Share via email to be implemented');
+      console.log('Web Share API not supported');
     }
   };
 
   const handleDelete = async () => {
     if (!selectedPhoto) return;
-    
+
     try {
       const response = await fetch('/api/photos', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: selectedPhoto.Key }),
       });
-      
+
       if (response.ok) {
         setPhotos(photos.filter(photo => photo.Key !== selectedPhoto.Key));
         setSelectedPhoto(null);
