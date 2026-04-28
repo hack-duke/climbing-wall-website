@@ -21,7 +21,7 @@ export function PhotoGrid() {
         setLoading(true);
         const response = await fetch('/api/photos');
         const data = await response.json();
-        setPhotos(data.photos || []);
+        setPhotos(data.photos.reverse() || []); // reverse to show newest first
  
       } catch (error) {
         console.error('Error fetching photos:', error);
